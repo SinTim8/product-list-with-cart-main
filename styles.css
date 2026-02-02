@@ -1,9 +1,400 @@
-.product-card img {
+@font-face {
+  font-family: 'RedHatText'; /* Имя, которое ты сам придумал */
+  src: url('./assets/fonts/RedHatText-VariableFont_wght.ttf') format('truetype');
+  font-weight: 100 900; /* Если шрифт вариативный, указываем диапазон */
+  font-style: normal;
+}
+:root {
+  --color-primary-red: hsl(14, 86%, 42%);
+  --color-primary-green: hsl(159, 69%, 38%);
+
+  --color-rose-50: hsl(20, 50%, 98%);
+  --color-rose-100: hsl(13, 31%, 94%);
+  --color-rose-300: hsl(14, 25%, 72%);
+  --color-rose-400: hsl(7, 20%, 60%);
+  --color-rose-500: hsl(12, 20%, 44%);
+  --color-rose-900: hsl(14, 65%, 9%);
+  
+  /* Typography */
+  --font-main: 'RedHatText', sans-serif;
+  --font-weight-normal: 400;
+  --font-weight-semi: 600;
+  --font-weight-bold: 700;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+button, input, select, textarea {
+  font-family: inherit;
+}
+
+body {
+  font-family: var(--font-main);
+  font-size: 1rem;
+  font-weight: var(--font-weight-normal);
+}
+section {
+  display: grid;
+  grid-template-columns: 1fr; /* Одна колонка по умолчанию */
+  gap: 1.5rem;
+}
+.product-card {
+  display: flex;
+  flex-direction: column;
+  
+}
+.product-image {
   width: 100%;
   height: auto;
   display: block;
   border-radius: 8px;
 }
-.product-card {
-    padding: 16px;
+
+.is-border {
+  border: solid 2px var(--color-primary-red);
+}
+
+.product-image-container {
+  position: relative;
+  border-radius: 8px;
+}
+.quantity-selector-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--color-primary-red);
+  color: var(--color-rose-50);
+  
+  
+}
+.quantity-value {
+  color: var(--color-rose-50);
+}
+.increment, .decrement {
+  background: transparent;
+  width: 1.25rem;
+  height: 1.25rem;
+  border: solid 1px var(--color-rose-50);
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;  
+  margin: 0 0.8rem;
+}
+
+.increment::before {
+  content: '';
+  mask-image: url(./assets/images/icon-increment-quantity.svg);
+  mask-size: contain;
+  mask-position: center;
+  mask-repeat: no-repeat;
+  background-color: var(--color-rose-50);
+  display: inline-block;
+  width: 0.7rem;
+  height: 0.7rem;
+}
+.decrement::before {
+  content: '';
+  mask-image: url(./assets/images/icon-decrement-quantity.svg);
+  mask-size: contain;
+  mask-position: center;
+  mask-repeat: no-repeat;
+  background-color: var(--color-rose-50);
+  display: inline-block;
+  width: 0.7rem;
+  height: 0.7rem;
+}
+
+.add-to-cart-btn, .quantity-selector-btn {
+  font-size: 0.875rem;
+  bottom: 0;
+  width: 50%;
+  min-width: 150px;
+  position: relative;
+  /* z-index: 2; */
+  left: 50%;
+  transform: translate(-50%, -50%);
+  
+  padding: 0.7rem 0;
+  border-radius: 25px;
+  display: flex;
+  
+  font-family: var(--font-main);
+  font-weight: var(--font-weight-semi);
+  height: 2.8rem;
+  
+}
+.add-to-cart-btn {
+  background-color: var(--color-rose-50);
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border: solid 1px var(--color-rose-300);
+}
+.add-to-cart-btn > img {
+  margin-right: 8px;
+  width: 20px;
+  height: 20px;
+
+}
+
+p {
+  color: var(--color-rose-300);
+  font-weight: var(--font-weight-semi);
+  font-size: 0.8rem;
+}
+.product-info > h3 {
+  margin: 0.2rem 0;
+  font-size: 1rem;
+  font-weight: var(--font-weight-semi);
+  color: var(--color-rose-900);
+}
+.price {
+  color: var(--color-primary-red);
+  font-weight: var(--font-weight-semi);
+}
+
+h1, h2 {
+  font-size: 2.5rem;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-rose-900);
+  margin-bottom: 0.5rem;
+}
+main {
+  max-width: 450px;
+  margin: 0 auto;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column; 
+  justify-content: center;
+  background-color: var(--color-rose-100);
+}
+
+.cart {
+  background-color: var(--color-rose-50);
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-top: 2rem;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1.5rem;
+}
+
+.cart-empty-state {
+  display: block;
+  text-align: center;
+  color: var(--color-rose-400);
+  font-weight: var(--font-weight-semi);
+  font-size: 0.875rem;
+}
+
+.cart > h2 {
+  align-self: flex-start;
+  color: var(--color-primary-red);
+}
+
+
+.cart-items-list {
+  width: 100%;
+
+}
+.cart-item {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;  
+  border-bottom: solid 1px var(--color-rose-100);
+}
+.cart-item-info {
+  align-self: stretch;
+  justify-content: space-around;
+}
+.cart-item-name {
+  color: var(--color-rose-900);
+  margin-bottom: 0.5rem;
+}
+.cart-item-info {
+  margin: 1rem 0;
+}
+.cart-item-subtotal {
+  color: var(--color-rose-500);
+  font-weight: var(--font-weight-semi);
+}
+.cart-footer {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+.carbon-neutral {
+  background-color: var(--color-rose-100);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.8rem;
+  border-radius: 8px;
+}
+p > span {
+  color: var(--color-rose-900);
+}
+.remove-item-btn {
+  background-color: transparent;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  border: solid 2px var(--color-rose-300);
+  width: 1rem;
+  height: 1rem;
+  border-radius: 50%;
+}
+.remove-item-btn::before {
+  content: '';
+  display: inline-block;
+  width: 0.58rem;
+  height: 0.58rem;
+  mask-image: url(./assets/images/icon-remove-item.svg);
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  background-color: var(--color-rose-300);
+}
+.remove-item-btn:hover {
+  border: solid 2px var(--color-rose-500);;
+}
+.remove-item-btn:hover::before {
+  background-color: var(--color-rose-500);
+}
+.add-to-cart-btn:hover {
+  border-color: var(--color-primary-red);
+  color: var(--color-primary-red);
+}
+.increment:hover, .decrement:hover {
+  background-color: var(--color-rose-50);
+}
+.increment:hover::before, .decrement:hover::before {
+  background-color: var(--color-primary-red);
+}
+
+dialog {
+  padding: 1rem;
+  width: 100%;
+  border: none;
+  border-radius: 8px;
+}
+.total-label {
+  color: var(--color-rose-500);
+  font-weight: 600;
+}
+#new-order-btn, #confirm-order {
+  background-color: var(--color-primary-red);
+  color: var(--color-rose-50);
+  width: 100%;
+  border: none;
+  border-radius: 25px;
+  padding: 0.7rem 0;
+  font-family: var(--font-main);
+  font-weight: var(--font-weight-semi);
+  height: 2.8rem;
+}
+.items-list {
+  background-color: var(--color-rose-50);
+  border-radius: 8px;
+  margin: 2rem 0;
+  padding: 1rem;
+}
+.total-container {
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
+   margin-top: 1rem;
+}
+
+.total-amount {
+  font-size: 1.5rem;
+  color: var(--color-rose-900);
+  font-weight: var(--font-weight-bold);
+}
+.order-item-row {
+  display: flex;
+  gap: 1rem;
+  padding: 1rem 0;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: solid 1px var(--color-rose-100);
+}
+
+.name {
+  /* Твои шрифты и цвета */
+  color: var(--color-rose-900);
+  
+  /* Магия обрезки (должна быть именно здесь) */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  
+  /* width: 100% здесь полезен, чтобы p точно знал границы родителя */
+  width: 100%; 
+}
+
+.thumbnail {
+  height: 4rem;
+  width: 4rem;
+  border-radius: 8px;
+}
+.order-item-details {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-self: stretch;
+  flex: 1; 
+  min-width: 0; /* Оставь это, чтобы контейнер мог сжиматься */
+}
+  
+
+.order-quantity {
+  color: var(--color-primary-red);
+  margin-right: 0.8rem;
+  font-weight: var(--font-weight-semi);
+}
+.price-per-item {
+  color: var(--color-rose-300);
+  margin-right: 0.4rem;
+}
+.sub-total-price {
+  color: var(--color-rose-900);
+  font-weight: var(--font-weight-semi);
+
+}
+.is-hidden {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  main {
+    max-width: 1440px;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 2rem;
+  }
+  section {
+    grid-template-columns: repeat(3, 1fr);
+    flex: 1;
+  }
+  section > h1 {
+    grid-column: span 3;
+  }
+  .cart {
+    width: 30%;
+    flex-shrink: 1;
+    max-width: 380px;
+    margin-top: 0;
+  }
 }
