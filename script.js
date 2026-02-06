@@ -1,5 +1,7 @@
 
 const cart = {};
+const dataPath = './data.json';
+let products = [];
 const MIN_ORDER = 1;
 const EMPTY_CARD = 0;
 let totalCartQuantity = 0;
@@ -8,6 +10,39 @@ function toggleCartButtons (elements, isInSelectionMode) {
     elements.qntSelectorBtn.classList.toggle('is-hidden', !isInSelectionMode);
     elements.productImage.classList.toggle('is-border', isInSelectionMode);
 }
+async function loadData () {
+    const response = await fetch(dataPath);
+    products = await response.json();
+    renderProducts(products);
+}
+function renderProducts (products) {
+    let productCards = document.getElementById('cards');
+    productCards.innerHTML = '<h1>Desserts</h1>';
+    products.forEach(product => {
+        productCards.innerHTML += `
+            <article class="product-card">
+                <div class="product-image-container">
+                  <picture>
+                    <source media="(min-width: 1024px)" srcset="${product.image.desktop}">
+                    <source media="(min-width: 768px)" srcset="${product.image.tablet}">
+                    <img src="${product.image.mobile}" alt="product-image" class="product-image">
+                  </picture>
+                  <div class="quantity-selector-btn is-hidden">
+                    <button class="decrement"></button>
+                    <span class="quantity-value">0</span>
+                    <button class="increment"></button>
+                  </div>
+                  <button class="add-to-cart-btn"><img src="./assets/images/icon-add-to-cart.svg" alt="icon-add-to-cart">Add to Cart</button>
+                </div>
+                <div class="product-info">
+                  <p>${product.category}</p>
+                  <h3>${product.name}</h3>
+                  <span class="price">$${product.price.toFixed(2)}</span>
+                </div>
+            </article>
+        `
+    })
+};
 
 function getCardElements (cardButton) {
     const parentElement = cardButton.closest('.product-card');
@@ -17,10 +52,10 @@ function getCardElements (cardButton) {
     const name = parentElement.querySelector('h3').textContent;
     const price = parseFloat(parentElement.querySelector('.price').textContent.replace("$", ''));
     const productImage = parentElement.querySelector('.product-image')
-    const mainSrc = productImage.getAttribute('src');
-// Заменяем "-mobile.jpg", "-tablet.jpg" или "-desktop.jpg" на "-thumbnail.jpg"
-    const thumbnail = mainSrc.replace(/-(mobile|tablet|desktop)\.jpg$/, '-thumbnail.jpg');
-    return {addToCartBtn, qntSelectorBtn, qntValue, price, name, productImage, thumbnail};
+//     const mainSrc = productImage.getAttribute('src');
+// // Заменяем "-mobile.jpg", "-tablet.jpg" или "-desktop.jpg" на "-thumbnail.jpg"
+//     const thumbnail = mainSrc.replace(/-(mobile|tablet|desktop)\.jpg$/, '-thumbnail.jpg');
+    return {addToCartBtn, qntSelectorBtn, qntValue, price, name, productImage};
 }
 
 function updateQuantity (elements, change) {
@@ -29,7 +64,8 @@ function updateQuantity (elements, change) {
     totalCartQuantity += change;
     if (newQuantity > 0) {
         elements.qntValue.textContent = newQuantity;
-        cart[elements.name] = {'name': elements.name, 'quantity': newQuantity, 'price': elements.price, 'subTotal': newQuantity * elements.price, 'image': elements.thumbnail};
+        const productInfo = products.find(p => p.name === elements.name);
+        cart[elements.name] = {'name': elements.name, 'quantity': newQuantity, 'price': elements.price, 'subTotal': newQuantity * elements.price, 'image': productInfo.image.thumbnail};
         toggleCartButtons(elements, true);
     } else {
         elements.qntValue.textContent = 0;
@@ -155,3 +191,12 @@ newOrderBtn.addEventListener('click', (event) => {
     modal.close();
 });
 
+
+// Вызываем функцию загрузки
+loadData().then(() => {
+    // Этот блок выполнится ТОЛЬКО когда данные загрузятся
+    console.log("Данные загружены:", products);
+    
+    // Здесь мы в будущем вызовем функцию отрисовки
+    // renderProducts(products);
+});

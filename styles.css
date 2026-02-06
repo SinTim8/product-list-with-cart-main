@@ -260,9 +260,13 @@ p > span {
   display: inline-block;
   width: 0.58rem;
   height: 0.58rem;
+  -webkit-mask-image: url(./assets/images/icon-remove-item.svg);
   mask-image: url(./assets/images/icon-remove-item.svg);
+  -webkit-mask-size: contain;
   mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
   mask-repeat: no-repeat;
+  -webkit-mask-position: center;
   mask-position: center;
   background-color: var(--color-rose-300);
 }
@@ -288,7 +292,17 @@ dialog {
   width: 100%;
   border: none;
   border-radius: 8px;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  margin: 0;
+
 }
+
+dialog::backdrop {
+  background-color: rgba(0, 0, 0, 0.5); /* Полупрозрачный черный цвет */
+}
+
 .total-label {
   color: var(--color-rose-500);
   font-weight: 600;
@@ -396,5 +410,9 @@ dialog {
     flex-shrink: 1;
     max-width: 380px;
     margin-top: 0;
+  }
+  dialog {
+    width: 475px;
+    max-height: 700px;
   }
 }
